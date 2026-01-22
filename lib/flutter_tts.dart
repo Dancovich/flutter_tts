@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 typedef ErrorHandler = void Function(dynamic message);
 typedef ProgressHandler = void Function(
@@ -350,8 +351,16 @@ class FlutterTts {
       await _channel.invokeMethod('awaitSynthCompletion', awaitCompletion);
 
   /// [Future] which invokes the platform specific method for speaking
-  Future<dynamic> speak(String text) async =>
-      await _channel.invokeMethod('speak', text);
+  Future<dynamic> speak(String text, {bool focus = false}) async {
+    if (!kIsWeb && Platform.isAndroid) {
+      return await _channel.invokeMethod('speak', <String, dynamic>{
+        "text": text,
+        "focus": focus,
+      });
+    } else {
+      return await _channel.invokeMethod('speak', text);
+    }
+  }
 
   /// [Future] which invokes the platform specific method for pause
   Future<dynamic> pause() async => await _channel.invokeMethod('pause');
@@ -364,10 +373,12 @@ class FlutterTts {
 
   /// [Future] which invokes the platform specific method for synthesizeToFile
   /// ***Android and iOS supported only***
-  Future<dynamic> synthesizeToFile(String text, String fileName) async =>
+  Future<dynamic> synthesizeToFile(String text, String fileName,
+          [bool isFullPath = false]) async =>
       _channel.invokeMethod('synthesizeToFile', <String, dynamic>{
         "text": text,
         "fileName": fileName,
+        "isFullPath": isFullPath,
       });
 
   /// [Future] which invokes the platform specific method for setLanguage
@@ -404,7 +415,9 @@ class FlutterTts {
     const categoryToString = <IosTextToSpeechAudioCategory, String>{
       IosTextToSpeechAudioCategory.ambientSolo: iosAudioCategoryAmbientSolo,
       IosTextToSpeechAudioCategory.ambient: iosAudioCategoryAmbient,
-      IosTextToSpeechAudioCategory.playback: iosAudioCategoryPlayback
+      IosTextToSpeechAudioCategory.playback: iosAudioCategoryPlayback,
+      IosTextToSpeechAudioCategory.playAndRecord:
+          iosAudioCategoryPlaybackAndRecord,
     };
     const optionsToString = {
       IosTextToSpeechAudioCategoryOptions.mixWithOthers:
@@ -647,5 +660,9 @@ class FlutterTts {
       default:
         print('Unknown method ${call.method}');
     }
+  }
+
+  Future<void> setAudioAttributesForNavigation() async {
+    await _channel.invokeMethod('setAudioAttributesForNavigation');
   }
 }

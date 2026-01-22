@@ -1,5 +1,65 @@
 # ChangeLog
 
+## 4.2.5
+
+### Fixes
+
+- **Android:** Fixing namespace path
+
+## 4.2.4
+
+### Fixes
+
+- **Windows:** CMake fix
+
+### Features
+
+- **iOS:** Add playbackAndRecord category to iOS audio category mapping
+- **Android:** Bump to AGP 8.13
+
+## 4.2.3
+
+### Fixes
+
+- **Android:** Fix TTS reconnection behaviors
+- **Windows:** Replace deprecated exec_program with execute_process
+- **Windows:** Fix error on MSVC compilers
+
+## 4.2.2
+
+### Fixes
+
+- **Web:** Fixing setLanguage on iOS browsers
+
+## 4.2.1
+
+### Fixes
+
+- **iOS:** speeding up iOS plugin initialization
+- **Android:** Fixes npe on plugin initialization
+
+## 4.2.0
+
+### Features
+
+- **Windows:** Added extra metadata for voices
+- **Web:** Added progress events using onboundary
+
+## 4.1.0
+
+### Fixes
+
+- **Windows:** Fixes setvoices
+- **iOS:** Fixes exported audio having the wrong sampleRate on ios 18
+- **Android:** Fixes 'Reply already submitted' bug during synthesizeToFile
+
+### Features
+
+- **Android:** Added AudioFocus and Audio Attributes For Navigation
+- **Android/iOS/macOS:** Added extra metadata for voices
+- **Web:** Migrated js_interop to support WASM
+- **Android/iOS:** Improving synthesizeToFile
+
 ## 4.0.2
 
 ### Fixes
